@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalculatorTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'Calculator.test' Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.pantxi.calculator</a> &gt; <span class="el_source">CalculatorTest.java</span></div><h1>CalculatorTest.java</h1><pre class="source lang-java linenums">package com.pantxi.calculator;
+
+import org.junit.jupiter.api.*;
+/*
+L'instruction : import org.junit.jupiter.api.*     inclut (pour notre code) :
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+ */
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.text.MessageFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchException;
+import static org.junit.jupiter.api.Assertions.*;   // si on utilise les assertions de JUnit
+
+<span class="fc" id="L22">class CalculatorTest {</span>
+    private Calculator calculatorEnTest;
+    private static Instant startedAt;	// variable de classe
+
+    @BeforeEach
+    void setUp() {		// montage
+
+<span class="fc" id="L29">        calculatorEnTest = new Calculator();</span>
+<span class="fc" id="L30">    }</span>
+
+    @AfterEach
+    void tearDown() {	// démontage
+<span class="fc" id="L34">        calculatorEnTest = null;</span>
+<span class="fc" id="L35">    }</span>
+
+    @BeforeAll
+    static void suiteSetUp() {	// montage avant tous les tests
+<span class="fc" id="L39">        System.out.println(&quot;Tic chrono avant tous les tests&quot;);</span>
+<span class="fc" id="L40">        startedAt = Instant.now();</span>
+<span class="fc" id="L41">    }</span>
+
+    @AfterAll
+    static void suiteTearDown() {	// démontage après tous les tests
+<span class="fc" id="L45">        System.out.println(&quot;Tic chrono apres tous les tests&quot;);</span>
+<span class="fc" id="L46">        Instant endedAt = Instant.now();</span>
+<span class="fc" id="L47">        long duree = Duration.between(startedAt, endedAt).toMillis();</span>
+<span class="fc" id="L48">        System.out.println(&quot;Duree des tests : &quot; + duree + &quot; millisecondes&quot;);</span>
+<span class="fc" id="L49">        System.out.println(MessageFormat.format(&quot;Duree des tests : {0} ms&quot;, duree));</span>
+<span class="fc" id="L50">    }</span>
+
+    @DisplayName(&quot;Plusieurs tests de sommes simples de 2 int &quot; )
+    @ParameterizedTest(name = &quot;{0} + {1} = {2}&quot;)
+    @CsvSource({
+            &quot;0,    1,   1&quot;,
+            &quot;1,    2,   3&quot;,
+            &quot;-2,   2,   0&quot;,
+            &quot;0,    0,   0&quot;,
+            &quot;-1,   -2,  -3&quot;
+    })
+
+    void add_parametre_devrait_calculer_la_somme_de_deux_int(int first, int second, int expectedResult) throws Exception {
+        // GIVEN
+
+        // WHEN
+<span class="fc" id="L66">        int somme = calculatorEnTest.add(first, second);</span>
+
+        // THEN  -- SI on ne s'occupe pas de l'exception levée
+
+        //assertEquals(expectedResult, calculatorEnTest.add(first, second),
+        //		() -&gt; first + &quot; + &quot; + second + &quot; should equal &quot; + expectedResult);	// JUnit
+<span class="fc" id="L72">        assertThat(somme).isEqualTo(expectedResult);	                            // assertJ</span>
+<span class="fc" id="L73">    }</span>
+    @Test
+    void add_devrait_calculer_la_somme_de_deux_int() throws Exception {
+        // GIVEN
+<span class="fc" id="L77">        int opG = 1;</span>
+<span class="fc" id="L78">        int opD = 2;</span>
+
+        // WHEN
+<span class="fc" id="L81">        int somme = calculatorEnTest.add(opG,opD);</span>
+
+        //THEN
+<span class="fc" id="L84">        assertThat(somme).isEqualTo(3);</span>
+<span class="fc" id="L85">    }</span>
+
+    /*  Ci-dessous, une seconde possibilité de développement de la précédente méthode.
+        Je la trouve moins intéressante, car elle ne vérifie pas que le résultat de l'opération (add) est correct,
+        mais uniquement le fait qu'il n'y a pas eu d'exception levée.
+        A noter que la signature des 2 méthodes n'est pas exactement la même.
+
+    @Test
+    void add_devrait_calculer_la_somme_de_deux_int() {
+        // GIVEN
+        int opG = 1;
+        int opD = 2;
+
+        // WHEN
+        Exception erreur = catchException(()-&gt;calculatorEnTest.add(opG,opD));
+
+        // THEN
+        assertThat(erreur)
+                .isNull();
+    }
+    */
+    @Test
+    void add_devrait_lever_une_exception_si_somme_hors_intervalle_des_int() {
+        // GIVEN
+<span class="fc" id="L109">        int opG = 1;</span>
+<span class="fc" id="L110">        int opD = Integer.MAX_VALUE;</span>
+
+        // WHEN
+<span class="pc" id="L113">        Exception erreur = catchException(()-&gt;calculatorEnTest.add(opG,opD));</span>
+
+        // THEN
+<span class="fc" id="L116">        assertThat(erreur)</span>
+<span class="fc" id="L117">                .isNotNull()</span>
+<span class="fc" id="L118">                .isInstanceOf(RuntimeException.class)</span>
+<span class="fc" id="L119">                .hasMessage(&quot;somme en dehors des valeurs du type int&quot;);</span>
+<span class="fc" id="L120">    }</span>
+
+    @Test
+    void divide_devrait_retourner_zero_quand_diviseur_plus_grand_que_dividende()
+    {
+        // GIVEN
+<span class="fc" id="L126">        int opG = 1;</span>
+<span class="fc" id="L127">        int opD = 2;</span>
+
+        // WHEN
+<span class="fc" id="L130">        int quotient = calculatorEnTest.divide(opG,opD);</span>
+
+        //THEN
+<span class="fc" id="L133">        assertThat(quotient).isEqualTo(0);</span>
+<span class="fc" id="L134">    }</span>
+    @Test
+    void divide_devrait_lever_une_exception_quand_diviseur_est_0()
+    {
+<span class="fc" id="L138">        int opG = 1;</span>
+<span class="fc" id="L139">        int opD = 0;</span>
+
+        // WHEN
+<span class="pc" id="L142">        Throwable erreur = catchException(()-&gt;calculatorEnTest.divide(opG,opD));</span>
+
+        // THEN
+<span class="fc" id="L145">        assertThat(erreur)</span>
+<span class="fc" id="L146">                .isNotNull()</span>
+<span class="fc" id="L147">                .isInstanceOf(ArithmeticException.class)</span>
+<span class="fc" id="L148">                .hasMessage(&quot;division par zero&quot;);</span>
+<span class="fc" id="L149">    }</span>
+/*
+    @Timeout(1)	// en secondes
+    @Test
+    void longCalcul_devrait_durer_moins_d_1_seconde () {
+        // GIVEN
+
+        // WHEN
+        calculatorEnTest.longCalcul(900); 	// en millisecondes
+
+        // THEN
+        // pas d'assertion
+    }
+
+    @Test
+    void digitsSet_devrait_retourner_les_chiffres_d_un_entier_positif() {
+        //GIVEN
+        int entierPositif = 97689;
+
+        //WHEN
+        Set&lt;Integer&gt; ensembleChiffres = calculatorEnTest.ensembleChiffres(entierPositif);
+
+        //THEN
+        assertThat(ensembleChiffres).containsExactlyInAnyOrder(6, 7, 8, 9);
+    }
+
+    @Test
+    void digitsSet_devrait_retourner_les_chiffres_d_un_entier_negatif() {
+        //GIVEN
+        int entierNegatif = -1;
+
+        //WHEN
+        Set&lt;Integer&gt; ensembleChiffres = calculatorEnTest.ensembleChiffres(entierNegatif);
+
+        //THEN
+        assertThat(ensembleChiffres).containsExactlyInAnyOrder(1);
+    }
+    @Test
+    void digitsSet_devrait_retourner_le_chiffre_0_d_un_entier_nul() {
+        //GIVEN
+        int entierNul = 0000;
+
+        //WHEN
+        Set&lt;Integer&gt; ensembleChiffres = calculatorEnTest.ensembleChiffres(entierNul);
+
+        //THEN
+        assertThat(ensembleChiffres).containsExactlyInAnyOrder(0);
+    }
+    */
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

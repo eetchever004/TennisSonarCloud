@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'eclipse' // optional (to generate Eclipse project files)
+	id 'idea' // optional (to generate IntelliJ IDEA project files)
+	id 'jacoco'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.10.0'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	// https://mvnrepository.com/artifact/org.assertj/assertj-core
+	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	finalizedBy jacocoTestReport
+}
+
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.outputLocation=layout.buildDirectory.dir('reports/jacoco/test')
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.15 // pour passer, ou = 1 pour echouer
+			}
+		}
+	}
+}
+
+check.dependsOn jacocoTestCoverageVerification // ce qui fait reussir / echouer le build
+
+

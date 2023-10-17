@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Calculator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tests in 'Calculator.test' Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.pantxi.calculator</a> &gt; <span class="el_source">Calculator.java</span></div><h1>Calculator.java</h1><pre class="source lang-java linenums">package com.pantxi.calculator;
+import java.util.HashSet;
+import java.util.Set;
+
+<span class="fc" id="L5">public class Calculator {</span>
+    public int add(int opG, int opD) throws Exception {
+
+<span class="fc" id="L8">        double somme = (double) opG + (double) opD;</span>
+<span class="pc bpc" id="L9" title="1 of 4 branches missed.">        if ((somme &gt; Integer.MAX_VALUE) || (somme &lt; Integer.MIN_VALUE))</span>
+        {
+<span class="fc" id="L11">            throw new RuntimeException(&quot;somme en dehors des valeurs du type int&quot;);</span>
+        }
+<span class="fc" id="L13">        return (int) somme;</span>
+    }
+/*
+    public Rationnel add (Rationnel opG, Rationnel opD) {
+        Rationnel somme = opG.additionner(opD);
+        return somme;
+    }
+  */
+    public int divide(int opG, int opD) {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (opD == 0) {</span>
+<span class="fc" id="L23">            throw new ArithmeticException(&quot;division par zero&quot;);</span>
+        }
+<span class="fc" id="L25">        return opG / opD;</span>
+    }
+    public void longCalcul(int ms) {
+        // attendre ms millisecondes
+<span class="nc" id="L29">        try { 	Thread.sleep(ms);</span>
+        }
+<span class="nc" id="L31">        catch(InterruptedException e) {</span>
+<span class="nc" id="L32">            e.printStackTrace();</span>
+<span class="nc" id="L33">        }</span>
+<span class="nc" id="L34">    }</span>
+
+    public Set&lt;Integer&gt; ensembleChiffres(int pNombre) {
+<span class="nc" id="L37">        Set&lt;Integer&gt; entiers = new HashSet&lt;Integer&gt;(); // ensemble d'entiers vide</span>
+<span class="nc" id="L38">        String chaineDuNombre = String.valueOf(pNombre); 	// équivalent du nbre en châine de caractères</span>
+
+        // Parcours de la chaîne et ajout de chaque élément dans l'ensemble
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (int i=0; i&lt;chaineDuNombre.length(); i++) {</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (chaineDuNombre.charAt(i) != '-')</span>
+            {
+<span class="nc" id="L44">                entiers.add(Integer.parseInt(chaineDuNombre, i, i+1, 10));</span>
+				/* retourne l'équivalent en entier de la portion de chaîne comprise dans l'intervalle [i, i+1[.
+				   Lève une exception si la conversion en entier n'est pas possible.
+				*/
+            }
+        }
+<span class="nc" id="L50">        return entiers;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
